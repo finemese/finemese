@@ -40,3 +40,24 @@ Prima di scegliere il provider:
 
 ## Stato
 Questo documento è solo il piano di lavoro. Non attiva annunci, abbonamenti, pagamenti o modifiche al database.
+
+
+## Distribuzione su App Store e Google Play
+
+La strategia scelta è multipiattaforma: mantenere la PWA web e realizzare anche app iOS e Android.
+
+### Architettura da valutare
+- Riutilizzare il più possibile il progetto web esistente, valutando Capacitor per il packaging nativo.
+- Prima di scegliere, realizzare una prova tecnica su iOS e Android e verificare accesso, navigazione, gestione sessione, link, notifiche e comportamento offline.
+- Non inviare agli store una semplice WebView senza valore aggiunto: Apple richiede un'esperienza con funzionalità e utilità adeguate oltre a un sito riconfezionato.
+
+### Monetizzazione per piattaforma
+- Web/PWA: valutare Google AdSense e checkout web conforme alle regole applicabili.
+- iOS: per sbloccare funzioni digitali e abbonamenti nell'app, predisporre Apple In-App Purchase/StoreKit, rispettando le regole e le eventuali eccezioni regionali vigenti.
+- Android: per funzioni Premium e rimozione ads nell'app distribuita da Google Play, predisporre Google Play Billing, salvo eccezioni applicabili.
+- Annunci nelle app native: valutare Google AdMob con configurazione privacy/consenso adeguata.
+- Un servizio backend di entitlement dovrà riconoscere gli acquisti verificati e sincronizzare lo stato Premium tra dispositivi e piattaforme; prevedere ripristino acquisti, rinnovi, scadenze, rimborsi e cancellazioni.
+- Verificare le regole correnti degli store e i relativi costi/commissioni prima di configurare prezzi e pubblicazione.
+
+### Account e pubblicazione
+Serviranno account sviluppatore Apple Developer Program e Google Play Console intestati al titolare corretto, oltre a schede store, icone, screenshot, descrizioni, classificazione contenuti, informative privacy e build firmate.
