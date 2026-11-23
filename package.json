@@ -1,0 +1,26 @@
+{
+  "name": "finemese",
+  "version": "1.2.0",
+  "private": true,
+  "description": "FineMese web app packaged for iOS and Android with Capacitor",
+  "scripts": {
+    "copy:web": "node scripts/copy-web.mjs",
+    "cap:sync": "npm run copy:web && cap sync",
+    "cap:android": "npm run cap:sync && cap open android",
+    "cap:ios": "npm run cap:sync && cap open ios",
+    "cap:add:android": "npx cap add android",
+    "cap:add:ios": "npx cap add ios",
+    "cap:open:android": "npm run cap:sync && npx cap open android",
+    "cap:open:ios": "npm run cap:sync && npx cap open ios"
+  },
+  "dependencies": {
+    "@capacitor/core": "8.6.2"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "8.6.2"
+  },
+  "optionalDependencies": {
+    "@capacitor/android": "8.6.2",
+    "@capacitor/ios": "8.6.2"
+  }
+}
