@@ -68,3 +68,16 @@ La pipeline verifica la firma dell'APK e dell'AAB quando tutti e quattro i secre
 - Le compilazioni riuscite attestano la costruzione tecnica, non il collaudo completo su dispositivi reali né la prontezza per gli store.
 
 Prima della pubblicazione restano da completare: test su dispositivi reali, verifica dello schema e delle policy RLS nel progetto Supabase effettivo, test dei flussi di autenticazione e deep link, configurazione della firma e di Play Console, scheda Store, informativa privacy e dichiarazioni Data safety. La monetizzazione non è ancora integrata: va definito il modello commerciale prima di implementare acquisti o pubblicità.
+
+## Eliminazione account e dati
+
+L'interfaccia include un'azione di eliminazione account con doppia conferma. La funzione server-side è in `supabase/functions/delete-account/index.ts` e richiede JWT valido (`verify_jwt = true`). La funzione verifica la sessione con Supabase Auth e usa la chiave amministrativa solo lato server per eliminare l'utente. Non copiare mai `SUPABASE_SERVICE_ROLE_KEY` nel client, in `config.js` o nei secrets del repository.
+
+Prima di attivare questa funzione nel progetto Supabase:
+1. Verificare che tutte le tabelle con dati utente abbiano foreign key verso `auth.users` con `ON DELETE CASCADE`, oppure aggiungere una procedura server-side che elimini esplicitamente i record collegati.
+2. Distribuire la funzione con Supabase CLI: `supabase functions deploy delete-account`.
+3. Provare con un account di test e verificare che account e dati vengano effettivamente eliminati.
+4. Pubblicare una pagina web accessibile dall'esterno con le istruzioni per richiedere la cancellazione, e inserire il relativo URL nella Play Console. Il pulsante in app da solo non sostituisce il requisito del link web di Google Play.
+5. Aggiornare privacy policy e dichiarazioni Data safety in base al comportamento reale.
+
+La funzione e il pulsante sono presenti nel repository ma non sono ancora distribuiti né collaudati sul progetto Supabase collegato.
