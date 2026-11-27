@@ -14,6 +14,7 @@ Questa checklist distingue il lavoro preparato nel repository dai passaggi che r
 - [x] Modello HTML della pagina esterna per richieste di eliminazione account (docs/account-deletion.html); richiede recapito e tempi reali prima della pubblicazione.
 - [x] Script SQL non distruttivo per verificare RLS, policy e vincoli di cancellazione nel progetto Supabase reale (docs/supabase-live-verification.sql).
 - [x] Procedura di deploy e collaudo Supabase con account di test (docs/supabase-deployment-and-test.md).
+- [x] Revisione statica pre-release con rischi e controlli da completare (docs/pre-release-static-audit.md).
 
 ## Bloccanti tecnici prima della pubblicazione
 - [ ] Eseguire docs/supabase-live-verification.sql sul progetto Supabase corretto e verificare ogni tabella con dati utente, non solo quelle attese.
@@ -21,6 +22,7 @@ Questa checklist distingue il lavoro preparato nel repository dai passaggi che r
 - [ ] Verificare che tutte le tabelle utente abbiano foreign key con cancellazione a cascata; testare eliminazione account e dati con un account dedicato di prova.
 - [ ] Verificare le policy RLS effettive su Supabase con due account distinti. Il file SQL nel repository non prova che lo schema sia stato applicato al progetto live.
 - [ ] Verificare login, conferma email, reset password, sessione, logout e comportamento di rete su un dispositivo Android reale.
+- [ ] Valutare e fissare la versione dell'SDK Supabase caricato da CDN, oppure includerlo nel bundle; verificare CORS della Edge Function e configurare le origini necessarie.
 - [ ] Completare e pubblicare la pagina web esterna per richieste di eliminazione account, con URL da inserire nella Play Console.
 - [ ] Pubblicare informativa privacy completa e verificata.
 - [ ] Completare Data safety, classificazione contenuti, target audience e dichiarazioni Play Console.
