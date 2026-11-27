@@ -45,4 +45,9 @@ Aprire e provare i progetti nativi in Android Studio e Xcode su emulatori/dispos
 
 ## Stato della preparazione
 
-I file di configurazione Capacitor sono stati aggiunti al ramo di lavoro. I comandi di installazione, generazione dei progetti nativi, compilazione e test **non sono stati eseguiti** in questo ambiente. Nessuna app è ancora pronta per lo store.
+- GitHub Actions genera i progetti nativi Capacitor durante la build, senza versionare `ios/`, `android/` e `www/` nel repository.
+- La build Android di debug è stata completata e l'APK è disponibile come artefatto della relativa esecuzione GitHub Actions.
+- È presente una pipeline separata per APK/AAB Android di rilascio non firmati.
+- È presente una pipeline macOS per compilare l'app iOS destinata al simulatore. La prima esecuzione ha evidenziato un percorso Xcode errato, corretto nella pipeline; la nuova esecuzione è in verifica.
+
+Questi risultati attestano la compilazione, non il collaudo completo su dispositivi reali né la prontezza per gli store. Per Google Play serve firmare l'AAB di rilascio. Per App Store serve un archivio iOS firmato con certificati e provisioning Apple. Restano inoltre da collaudare Supabase, login, sessione, redirect/deep link, RLS e flussi dati con l'ambiente autorizzato.
