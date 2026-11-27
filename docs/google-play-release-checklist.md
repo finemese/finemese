@@ -1,7 +1,3 @@
-# FineMese — checklist prima di Google Play
-
-Questa checklist distingue il lavoro preparato nel repository dai passaggi che richiedono il titolare dell'account o accesso al progetto Supabase.
-
 ## Preparato nel ramo di lavoro
 - [x] Pipeline GitHub Actions per APK Android debug.
 - [x] Pipeline GitHub Actions per APK/AAB Android release.
@@ -10,7 +6,7 @@ Questa checklist distingue il lavoro preparato nel repository dai passaggi che r
 - [x] Filtri espliciti per utente autenticato nelle query Supabase del client.
 - [x] Funzione Supabase server-side per eliminazione account e azione in app con doppia conferma (non ancora distribuite/collaudate).
 - [x] Bozza scheda Play Store.
-- [x] Bozza informativa privacy con campi da verificare.
+- [x] Bozza informativa privacy in Markdown e HTML con campi da verificare.
 - [x] Modello HTML della pagina esterna per richieste di eliminazione account (docs/account-deletion.html); richiede recapito e tempi reali prima della pubblicazione.
 - [x] Script SQL non distruttivo per verificare RLS, policy e vincoli di cancellazione nel progetto Supabase reale (docs/supabase-live-verification.sql).
 
