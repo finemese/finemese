@@ -28,7 +28,7 @@ jobs:
           java-version: '21'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Prepare web assets
         run: npm run copy:web
@@ -42,14 +42,49 @@ jobs:
       - name: Sync Capacitor
         run: npx cap sync android
 
-      - name: Build release APK and Android App Bundle
+      - name: Configure Android signing key
+        if: ${{ secrets.ANDROID_KEYSTORE_BASE64 != '' && secrets.ANDROID_KEYSTORE_PASSWORD != '' && secrets.ANDROID_KEY_ALIAS != '' && secrets.ANDROID_KEY_PASSWORD != '' }}
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        run: |
+          set -euo pipefail
+          echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/finemese-upload-key.jks"
+          echo "ANDROID_KEYSTORE_FILE=$RUNNER_TEMP/finemese-upload-key.jks" >> "$GITHUB_ENV"
+
+      - name: Build signed release APK and Android App Bundle
+        if: ${{ env.ANDROID_KEYSTORE_FILE != '' }}
+        working-directory: android
+        env:
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          ./gradlew assembleRelease bundleRelease --no-daemon \
+            -Pandroid.injected.signing.store.file="$ANDROID_KEYSTORE_FILE" \
+            -Pandroid.injected.signing.store.password="$ANDROID_KEYSTORE_PASSWORD" \
+            -Pandroid.injected.signing.key.alias="$ANDROID_KEY_ALIAS" \
+            -Pandroid.injected.signing.key.password="$ANDROID_KEY_PASSWORD"
+
+      - name: Build unsigned release APK and Android App Bundle
+        if: ${{ env.ANDROID_KEYSTORE_FILE == '' }}
         working-directory: android
         run: ./gradlew assembleRelease bundleRelease --no-daemon
 
-      - name: Upload unsigned release packages
+      - name: Verify signed release packages
+        if: ${{ env.ANDROID_KEYSTORE_FILE != '' }}
+        run: |
+          set -euo pipefail
+          APK="$(find android/app/build/outputs/apk/release -name '*.apk' -print -quit)"
+          AAB="$(find android/app/build/outputs/bundle/release -name '*.aab' -print -quit)"
+          test -n "$APK"
+          test -n "$AAB"
+          "$ANDROID_HOME/build-tools/$(ls "$ANDROID_HOME/build-tools" | sort -V | tail -n 1)/apksigner" verify "$APK"
+          jarsigner -verify "$AAB"
+
+      - name: Upload release packages
         uses: actions/upload-artifact@v4
         with:
-          name: finemese-android-release-unsigned
+          name: finemese-android-release
           path: |
             android/app/build/outputs/apk/release/*.apk
             android/app/build/outputs/bundle/release/*.aab
