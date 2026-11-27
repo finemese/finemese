@@ -43,5 +43,5 @@ L'app attualmente prevede account email/password e memorizza su Supabase dati in
 - Pubblicità.
 - Collegamento automatico ai conti bancari.
 - Esportazione dei dati.
-- Eliminazione account self-service nell'interfaccia attuale.
+- Eliminazione account: interfaccia e funzione server-side predisposte nel repository, ma da distribuire e collaudare sul progetto Supabase reale; resta obbligatorio pubblicare anche un URL web esterno per le richieste di cancellazione.
 - Avanzamento automatico del budget o versamenti agli obiettivi.
