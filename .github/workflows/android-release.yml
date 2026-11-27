@@ -12,6 +12,11 @@ permissions:
 jobs:
   android-release:
     runs-on: ubuntu-latest
+    env:
+      ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+      ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+      ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+      ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -43,35 +48,29 @@ jobs:
         run: npx cap sync android
 
       - name: Configure Android signing key
-        if: ${{ secrets.ANDROID_KEYSTORE_BASE64 != '' && secrets.ANDROID_KEYSTORE_PASSWORD != '' && secrets.ANDROID_KEY_ALIAS != '' && secrets.ANDROID_KEY_PASSWORD != '' }}
-        env:
-          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        if: env.ANDROID_KEYSTORE_BASE64 != '' && env.ANDROID_KEYSTORE_PASSWORD != '' && env.ANDROID_KEY_ALIAS != '' && env.ANDROID_KEY_PASSWORD != ''
         run: |
           set -euo pipefail
           echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/finemese-upload-key.jks"
           echo "ANDROID_KEYSTORE_FILE=$RUNNER_TEMP/finemese-upload-key.jks" >> "$GITHUB_ENV"
 
       - name: Build signed release APK and Android App Bundle
-        if: ${{ env.ANDROID_KEYSTORE_FILE != '' }}
+        if: env.ANDROID_KEYSTORE_BASE64 != '' && env.ANDROID_KEYSTORE_PASSWORD != '' && env.ANDROID_KEY_ALIAS != '' && env.ANDROID_KEY_PASSWORD != ''
         working-directory: android
-        env:
-          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
-          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
         run: |
           ./gradlew assembleRelease bundleRelease --no-daemon \
-            -Pandroid.injected.signing.store.file="$ANDROID_KEYSTORE_FILE" \
+            -Pandroid.injected.signing.store.file="$RUNNER_TEMP/finemese-upload-key.jks" \
             -Pandroid.injected.signing.store.password="$ANDROID_KEYSTORE_PASSWORD" \
             -Pandroid.injected.signing.key.alias="$ANDROID_KEY_ALIAS" \
             -Pandroid.injected.signing.key.password="$ANDROID_KEY_PASSWORD"
 
       - name: Build unsigned release APK and Android App Bundle
-        if: ${{ env.ANDROID_KEYSTORE_FILE == '' }}
+        if: env.ANDROID_KEYSTORE_BASE64 == '' || env.ANDROID_KEYSTORE_PASSWORD == '' || env.ANDROID_KEY_ALIAS == '' || env.ANDROID_KEY_PASSWORD == ''
         working-directory: android
         run: ./gradlew assembleRelease bundleRelease --no-daemon
 
       - name: Verify signed release packages
-        if: ${{ env.ANDROID_KEYSTORE_FILE != '' }}
+        if: env.ANDROID_KEYSTORE_BASE64 != '' && env.ANDROID_KEYSTORE_PASSWORD != '' && env.ANDROID_KEY_ALIAS != '' && env.ANDROID_KEY_PASSWORD != ''
         run: |
           set -euo pipefail
           APK="$(find android/app/build/outputs/apk/release -name '*.apk' -print -quit)"
