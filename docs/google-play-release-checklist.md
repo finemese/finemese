@@ -13,6 +13,7 @@ Questa checklist distingue il lavoro preparato nel repository dai passaggi che r
 - [x] Bozza informativa privacy in Markdown e HTML con campi da verificare.
 - [x] Modello HTML della pagina esterna per richieste di eliminazione account (docs/account-deletion.html); richiede recapito e tempi reali prima della pubblicazione.
 - [x] Script SQL non distruttivo per verificare RLS, policy e vincoli di cancellazione nel progetto Supabase reale (docs/supabase-live-verification.sql).
+- [x] Procedura di deploy e collaudo Supabase con account di test (docs/supabase-deployment-and-test.md).
 
 ## Bloccanti tecnici prima della pubblicazione
 - [ ] Eseguire docs/supabase-live-verification.sql sul progetto Supabase corretto e verificare ogni tabella con dati utente, non solo quelle attese.
