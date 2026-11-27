@@ -15,7 +15,7 @@ Questa guida prepara il progetto per creare app iOS e Android a partire dalla st
 Dalla cartella principale del repository:
 
 ```bash
-npm ci
+npm install
 npm run copy:web
 ```
 
