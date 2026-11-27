@@ -1,3 +1,7 @@
+# FineMese — checklist prima di Google Play
+
+Questa checklist distingue il lavoro preparato nel repository dai passaggi che richiedono il titolare dell'account o accesso al progetto Supabase.
+
 ## Preparato nel ramo di lavoro
 - [x] Pipeline GitHub Actions per APK Android debug.
 - [x] Pipeline GitHub Actions per APK/AAB Android release.
