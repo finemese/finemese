@@ -16,8 +16,11 @@ Dalla cartella principale del repository:
 
 ```bash
 npm install
+npm run test:static
 npm run copy:web
 ```
+
+Il pacchetto `@supabase/supabase-js` è fissato a una versione esatta in `package.json`; `copy:web` include il bundle UMD locale in `www/vendor/supabase.js`, così la WebView non deve scaricare l'SDK da una CDN a runtime.
 
 Aggiungere le piattaforme una sola volta:
 
