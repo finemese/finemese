@@ -12,7 +12,8 @@ const [pkg, html, config, schema, deletion, copyScript, sdkBundle] = await Promi
   read('www/vendor/supabase.js')
 ]);
 
-assert.match(pkg.dependencies?.['@supabase/supabase-js'] ?? '', /^\d+\.\d+\.\d+$/, 'Supabase SDK must be pinned to an exact version');
+const packageJson = JSON.parse(pkg);
+assert.match(packageJson.dependencies?.['@supabase/supabase-js'] ?? '', /^\d+\.\d+\.\d+$/, 'Supabase SDK must be pinned to an exact version');
 assert.match(copyScript, /node_modules\/@supabase\/supabase-js\/dist\/umd\/supabase\.js/, 'web copy step must include the installed Supabase UMD bundle');
 assert.match(copyScript, /www\/vendor\/supabase\.js/, 'web copy step must place the SDK in local app assets');
 assert.match(html, /<script src="\.\/vendor\/supabase\.js"><\/script>/, 'app must load the local Supabase SDK');
