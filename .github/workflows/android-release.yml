@@ -39,11 +39,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run static security checks
-        run: npm run test:static
-
       - name: Prepare web assets
         run: npm run copy:web
+
+      - name: Run static security checks
+        run: npm run test:static
 
       - name: Add Android platform if missing
         run: |
