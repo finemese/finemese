@@ -22,7 +22,8 @@ Questa checklist distingue il lavoro preparato nel repository dai passaggi che r
 - [ ] Verificare che tutte le tabelle utente abbiano foreign key con cancellazione a cascata; testare eliminazione account e dati con un account dedicato di prova.
 - [ ] Verificare le policy RLS effettive su Supabase con due account distinti. Il file SQL nel repository non prova che lo schema sia stato applicato al progetto live.
 - [ ] Verificare login, conferma email, reset password, sessione, logout e comportamento di rete su un dispositivo Android reale.
-- [ ] Valutare e fissare la versione dell'SDK Supabase caricato da CDN, oppure includerlo nel bundle; verificare CORS della Edge Function e configurare le origini necessarie.
+- [x] Fissare una versione esatta dell'SDK Supabase e includere il bundle locale negli asset Capacitor; la build CI deve confermare che il file sia presente e caricabile.
+- [ ] Verificare il funzionamento dell'SDK locale nelle WebView Android/iOS e valutare CORS della Edge Function rispetto ai flussi effettivi.
 - [ ] Completare e pubblicare la pagina web esterna per richieste di eliminazione account, con URL da inserire nella Play Console.
 - [ ] Pubblicare informativa privacy completa e verificata.
 - [ ] Completare Data safety, classificazione contenuti, target audience e dichiarazioni Play Console.
