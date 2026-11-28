@@ -41,7 +41,9 @@ jobs:
           fi
 
       - name: Sync Capacitor
-        run: npx cap sync ios
+        run: |
+          npx cap sync ios
+          node scripts/configure-admob-test.mjs
 
       - name: Build iOS simulator app
         run: |
