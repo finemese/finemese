@@ -14,8 +14,10 @@ Questa checklist distingue il lavoro preparato nel repository dai passaggi che r
 - [x] Modello HTML della pagina esterna per richieste di eliminazione account (docs/account-deletion.html); richiede recapito e tempi reali prima della pubblicazione.
 - [x] Script SQL non distruttivo per verificare RLS, policy e vincoli di cancellazione nel progetto Supabase reale (docs/supabase-live-verification.sql).
 - [x] Procedura di deploy e collaudo Supabase con account di test (docs/supabase-deployment-and-test.md).
-- [x] Revisione statica pre-release con rischi e controlli da completare (docs/pre-release-static-audit.md).
-- [x] Controlli statici automatici inseriti nei workflow Android e iOS; verificano la presenza dell'SDK locale e alcuni requisiti di sicurezza (non sostituiscono i test runtime).
+- [x] Revisione statica pre-release con rischi e controlli da completare.
+- [x] Controlli statici automatici nei workflow Android e iOS.
+- [x] Build CI verificate con successo sul commit `36d71368efe15092367678ae510caeb60156085d` (28 novembre 2026): APK debug, release Android APK/AAB e app iOS Simulator. I controlli statici sono passati in tutti e tre i workflow.
+- [x] Artefatto release Android generato: `finemese-android-release` (APK e AAB non firmati perché i secrets di firma non sono configurati). Run: https://github.com/finemese/finemese/actions/runs/46146363750
 
 ## Bloccanti tecnici prima della pubblicazione
 - [ ] Eseguire docs/supabase-live-verification.sql sul progetto Supabase corretto e verificare ogni tabella con dati utente, non solo quelle attese.
@@ -23,7 +25,7 @@ Questa checklist distingue il lavoro preparato nel repository dai passaggi che r
 - [ ] Verificare che tutte le tabelle utente abbiano foreign key con cancellazione a cascata; testare eliminazione account e dati con un account dedicato di prova.
 - [ ] Verificare le policy RLS effettive su Supabase con due account distinti. Il file SQL nel repository non prova che lo schema sia stato applicato al progetto live.
 - [ ] Verificare login, conferma email, reset password, sessione, logout e comportamento di rete su un dispositivo Android reale.
-- [x] Fissare una versione esatta dell'SDK Supabase e includere il bundle locale negli asset Capacitor; la build CI deve confermare che il file sia presente e caricabile.
+- [x] Fissare una versione esatta dell'SDK Supabase e includere il bundle locale negli asset Capacitor; la build CI conferma che il file sia presente e caricabile.
 - [ ] Verificare il funzionamento dell'SDK locale nelle WebView Android/iOS e valutare CORS della Edge Function rispetto ai flussi effettivi.
 - [ ] Completare e pubblicare la pagina web esterna per richieste di eliminazione account, con URL da inserire nella Play Console.
 - [ ] Pubblicare informativa privacy completa e verificata.
