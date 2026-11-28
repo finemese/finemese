@@ -11,7 +11,8 @@ const ANDROID_BANNER_TEST_ID = 'ca-app-pub-3940256099942544/9214589741';
 const IOS_BANNER_TEST_ID = 'ca-app-pub-3940256099942544/2435281174';
 
 let initialized = false;
-let bannerVisible = false;\nlet bannerHidden = false;
+let bannerVisible = false;
+let bannerHidden = false;
 let privacyOptionsRequired = false;
 let startupPromise = null;
 
@@ -50,7 +51,19 @@ async function start() {
 }
 
 async function showBanner() {
-  if (!Capacitor.isNativePlatform() || bannerVisible) return;
+  if (!Capacitor.isNativePlatform()) return;
+  if (bannerVisible) {
+    if (bannerHidden) {
+      try {
+        await AdMob.resumeBanner();
+        bannerHidden = false;
+      } catch (error) {
+        console.warn('FineMese banner resume failed:', error);
+      }
+    }
+    return;
+  }
+
   const ready = await start();
   if (!ready.available) return;
 
@@ -62,16 +75,18 @@ async function showBanner() {
       margin: 0,
       isTesting: true
     });
-    bannerVisible = true;\n    bannerHidden = false;
+    bannerVisible = true;
+    bannerHidden = false;
   } catch (error) {
     console.warn('FineMese test banner unavailable:', error);
   }
 }
 
 async function hideBanner() {
-  if (!Capacitor.isNativePlatform() || !bannerVisible) return;
+  if (!Capacitor.isNativePlatform() || !bannerVisible || bannerHidden) return;
   try {
     await AdMob.hideBanner();
+    bannerHidden = true;
   } catch (error) {
     console.warn('FineMese banner hide failed:', error);
   }
@@ -84,7 +99,8 @@ async function removeBanner() {
   } catch (error) {
     console.warn('FineMese banner removal failed:', error);
   } finally {
-    bannerVisible = false;\n    bannerHidden = false;
+    bannerVisible = false;
+    bannerHidden = false;
   }
 }
 
