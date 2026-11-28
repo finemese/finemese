@@ -54,7 +54,7 @@ jobs:
       - name: Sync Capacitor
         run: |
           npx cap sync android
-          node scripts/configure-admob-test.mjs
+          node scripts/configure-admob-test.mjs android
 
       - name: Configure Android signing key
         if: env.ANDROID_KEYSTORE_BASE64 != '' && env.ANDROID_KEYSTORE_PASSWORD != '' && env.ANDROID_KEY_ALIAS != '' && env.ANDROID_KEY_PASSWORD != ''
