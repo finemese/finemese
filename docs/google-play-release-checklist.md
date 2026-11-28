@@ -18,6 +18,7 @@ Questa checklist distingue il lavoro preparato nel repository dai passaggi che r
 - [x] Controlli statici automatici nei workflow Android e iOS.
 - [x] Build CI verificate con successo sul commit `36d71368efe15092367678ae510caeb60156085d` (28 novembre 2026): APK debug, release Android APK/AAB e app iOS Simulator. I controlli statici sono passati in tutti e tre i workflow.
 - [x] Artefatto release Android generato: `finemese-android-release` (APK e AAB non firmati perché i secrets di firma non sono configurati). Run: https://github.com/finemese/finemese/actions/runs/46146363750
+- [x] Piano monetizzazione iniziale documentato in docs/monetization-plan.md: versione gratuita con un banner limitato + Pro senza pubblicità con acquisto una tantum indicativo di €7,99.
 
 ## Bloccanti tecnici prima della pubblicazione
 - [ ] Eseguire docs/supabase-live-verification.sql sul progetto Supabase corretto e verificare ogni tabella con dati utente, non solo quelle attese.
@@ -31,12 +32,16 @@ Questa checklist distingue il lavoro preparato nel repository dai passaggi che r
 - [ ] Pubblicare informativa privacy completa e verificata.
 - [ ] Completare Data safety, classificazione contenuti, target audience e dichiarazioni Play Console.
 - [ ] Preparare icona 512 × 512, feature graphic 1024 × 500 e screenshot reali.
-- [ ] Definire modello di monetizzazione e implementare l'eventuale acquisto in-app o pubblicità nel rispetto delle policy. Attualmente non c'è monetizzazione attiva.
+- [ ] Creare account AdMob, registrare l'app e generare App ID e Ad Unit ID banner.
+- [ ] Integrare CMP/Google UMP e flusso di consenso per utenti SEE prima delle richieste pubblicitarie.
+- [ ] Integrare AdMob con un solo banner nelle schermate principali autenticate; usare solo unità di test fino al via libera privacy/policy.
+- [ ] Implementare Google Play Billing per l'acquisto una tantum Pro e la rimozione degli annunci; prezzo indicativo €7,99 da confermare.
+- [ ] Aggiornare privacy policy e Data safety in base agli SDK e ai dati effettivamente trattati.
 
 ## Interventi richiesti al titolare
 - [ ] Fornire i recapiti del titolare e un indirizzo email di assistenza da pubblicare nell'informativa e nella pagina di eliminazione.
 - [ ] Confermare i tempi effettivi di gestione delle richieste e di conservazione dei backup, dopo averli verificati con la configurazione Supabase.
-- [ ] Scegliere il modello commerciale prima di attivare i pagamenti.
+- [ ] Creare/configurare account AdMob e app Android; gli identificativi pubblici dell'app/annunci potranno poi essere inseriti nella configurazione, senza condividere password o chiavi private.
 - [ ] Generare una chiave di upload sicura e configurare i quattro repository secrets indicati in docs/capacitor-setup.md. Non inviare password o chiavi in chat.
 - [ ] Creare/verificare account Google Play Console e pagare la quota una tantum mostrata da Google.
 - [ ] Quando Google Play lo richiede per un nuovo account personale, reclutare almeno 12 tester reali che aderiscano al test chiuso per 14 giorni consecutivi, quindi inviare la richiesta di accesso alla produzione.
