@@ -15,6 +15,7 @@ Questa checklist distingue il lavoro preparato nel repository dai passaggi che r
 - [x] Script SQL non distruttivo per verificare RLS, policy e vincoli di cancellazione nel progetto Supabase reale (docs/supabase-live-verification.sql).
 - [x] Procedura di deploy e collaudo Supabase con account di test (docs/supabase-deployment-and-test.md).
 - [x] Revisione statica pre-release con rischi e controlli da completare (docs/pre-release-static-audit.md).
+- [x] Controlli statici automatici inseriti nei workflow Android e iOS; verificano la presenza dell'SDK locale e alcuni requisiti di sicurezza (non sostituiscono i test runtime).
 
 ## Bloccanti tecnici prima della pubblicazione
 - [ ] Eseguire docs/supabase-live-verification.sql sul progetto Supabase corretto e verificare ogni tabella con dati utente, non solo quelle attese.
