@@ -2,7 +2,6 @@ import { Capacitor } from '@capacitor/core';
 import {
   AdMob,
   AdmobConsentStatus,
-  PrivacyOptionsRequirementStatus,
   BannerAdSize,
   BannerAdPosition
 } from '@capacitor-community/admob';
@@ -28,7 +27,7 @@ async function start() {
       }
 
       privacyOptionsRequired =
-        consent.privacyOptionsRequirementStatus === PrivacyOptionsRequirementStatus.REQUIRED;
+        consent.privacyOptionsRequirementStatus === 'REQUIRED';
       window.dispatchEvent(new CustomEvent('finemese:privacy-options', {
         detail: { required: privacyOptionsRequired }
       }));
