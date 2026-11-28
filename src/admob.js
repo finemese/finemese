@@ -57,6 +57,7 @@ async function showBanner() {
       try {
         await AdMob.resumeBanner();
         bannerHidden = false;
+        document.documentElement.classList.add('finemese-has-banner');
       } catch (error) {
         console.warn('FineMese banner resume failed:', error);
       }
@@ -77,6 +78,7 @@ async function showBanner() {
     });
     bannerVisible = true;
     bannerHidden = false;
+    document.documentElement.classList.add('finemese-has-banner');
   } catch (error) {
     console.warn('FineMese test banner unavailable:', error);
   }
@@ -87,6 +89,7 @@ async function hideBanner() {
   try {
     await AdMob.hideBanner();
     bannerHidden = true;
+    document.documentElement.classList.remove('finemese-has-banner');
   } catch (error) {
     console.warn('FineMese banner hide failed:', error);
   }
@@ -101,6 +104,7 @@ async function removeBanner() {
   } finally {
     bannerVisible = false;
     bannerHidden = false;
+    document.documentElement.classList.remove('finemese-has-banner');
   }
 }
 
