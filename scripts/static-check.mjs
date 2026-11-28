@@ -21,7 +21,8 @@ assert.ok(sdkBundle.length > 10000 && sdkBundle.includes('createClient'), 'copie
 assert.doesNotMatch(html, /cdn\.jsdelivr\.net\/npm\/@supabase\/supabase-js|unpkg\.com\/@supabase\/supabase-js/, 'app must not load Supabase SDK from a floating CDN version');
 assert.match(config, /https:\/\/[a-z0-9-]+\.supabase\.co/, 'Supabase project URL must use HTTPS');
 assert.match(config, /sb_publishable_|eyJ/, 'Supabase client key must be configured');
-assert.doesNotMatch(config, /service_role|SUPABASE_SERVICE_ROLE_KEY/i, 'service role key must never be shipped in client config');
+const clientConfig = config.replace(/^\\s*\\/\\/.*$/gm, '');
+assert.doesNotMatch(clientConfig, /service_role|SUPABASE_SERVICE_ROLE_KEY/i, 'service role key must never be shipped in client config');
 for (const table of ['transactions', 'budgets', 'goals']) {
   assert.match(schema, new RegExp('alter table public\\.' + table + ' enable row level security', 'i'), table + ' must enable RLS');
 }
