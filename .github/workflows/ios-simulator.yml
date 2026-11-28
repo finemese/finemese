@@ -1,0 +1,68 @@
+name: Build Fine Mese iOS simulator app
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - work/mobile-build-automation
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  ios-simulator:
+    runs-on: macos-26
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Prepare web assets
+        run: npm run copy:web
+
+      - name: Run static security checks
+        run: npm run test:static
+
+      - name: Add iOS platform if missing
+        run: |
+          if [ ! -d ios ]; then
+            npx cap add ios
+          fi
+
+      - name: Sync Capacitor
+        run: |
+          npx cap sync ios
+          node scripts/configure-admob-test.mjs ios
+
+      - name: Build iOS simulator app
+        run: |
+          xcodebuild -project ios/App/App.xcodeproj \
+            -scheme App \
+            -sdk iphonesimulator \
+            -configuration Debug \
+            -derivedDataPath build/DerivedData \
+            CODE_SIGNING_ALLOWED=NO build
+
+      - name: Package simulator app
+        run: |
+          APP_PATH="build/DerivedData/Build/Products/Debug-iphonesimulator/App.app"
+          test -d "$APP_PATH"
+          ditto -c -k --sequesterRsrc --keepParent "$APP_PATH" build/FineMese-iOS-Simulator.zip
+
+      - name: Upload iOS simulator artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: finemese-ios-simulator
+          path: build/FineMese-iOS-Simulator.zip
+          if-no-files-found: error

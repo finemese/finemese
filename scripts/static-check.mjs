@@ -1,0 +1,55 @@
+import { readFile } from 'node:fs/promises';
+import assert from 'node:assert/strict';
+
+const read = (path) => readFile(new URL('../' + path, import.meta.url), 'utf8');
+const [
+  pkg, html, config, schema, deletion, copyScript, sdkBundle,
+  admobSource, admobBundle, nativeAdmobConfig
+] = await Promise.all([
+  read('package.json'),
+  read('index.html'),
+  read('config.js'),
+  read('supabase/schema.sql'),
+  read('supabase/functions/delete-account/index.ts'),
+  read('scripts/copy-web.mjs'),
+  read('www/vendor/supabase.js'),
+  read('src/admob.js'),
+  read('www/vendor/finemese-admob.js'),
+  read('scripts/configure-admob-test.mjs')
+]);
+
+const packageJson = JSON.parse(pkg);
+assert.match(packageJson.dependencies?.['@supabase/supabase-js'] ?? '', /^\d+\.\d+\.\d+$/, 'Supabase SDK must be pinned to an exact version');
+assert.match(packageJson.dependencies?.['@capacitor-community/admob'] ?? '', /^8\.5\.0$/, 'Capacitor AdMob plugin must be pinned to the tested Capacitor 8 release');
+assert.match(packageJson.devDependencies?.esbuild ?? '', /^0\.28\.2$/, 'esbuild must be pinned exactly');
+assert.match(copyScript, /node_modules\/@supabase\/supabase-js\/dist\/umd\/supabase\.js/, 'web copy step must include the installed Supabase UMD bundle');
+assert.match(copyScript, /www\/vendor\/supabase\.js/, 'web copy step must place the SDK in local app assets');
+assert.match(copyScript, /entryPoints: \['src\/admob\.js'\]/, 'web copy step must bundle the AdMob module');
+assert.match(html, /<script src="\.\/vendor\/supabase\.js"><\/script>/, 'app must load the local Supabase SDK');
+assert.match(html, /vendor\/finemese-admob\.js/, 'app must load the local AdMob bundle');
+assert.ok(sdkBundle.length > 10000 && sdkBundle.includes('createClient'), 'copied local Supabase SDK bundle must exist and contain createClient');
+assert.ok(admobBundle.length > 10000, 'bundled AdMob plugin must exist in local web assets');
+assert.match(admobSource, /AdMob\.requestConsentInfo\(\)/, 'AdMob must request current consent information');
+assert.match(admobSource, /AdMob\.showConsentForm\(\)/, 'AdMob must display the required consent form');
+assert.match(admobSource, /consent\.canRequestAds/, 'AdMob must gate requests on UMP consent');
+assert.match(admobSource, /AdMob\.showPrivacyOptionsForm\(\)/, 'AdMob must expose privacy options when required');
+assert.match(admobSource, /isTesting: true/, 'AdMob must remain in test-ad mode until release setup');
+assert.match(nativeAdmobConfig, /ca-app-pub-3940256099942544~3347511713/, 'Android must use the official sample AdMob app ID in CI');
+assert.match(nativeAdmobConfig, /ca-app-pub-3940256099942544~1458002511/, 'iOS must use the official sample AdMob app ID in CI');
+assert.doesNotMatch(html, /cdn\.jsdelivr\.net\/npm\/@supabase\/supabase-js|unpkg\.com\/@supabase\/supabase-js/, 'app must not load Supabase SDK from a floating CDN version');
+
+assert.match(config, /https:\/\/[a-z0-9-]+\.supabase\.co/, 'Supabase project URL must use HTTPS');
+assert.match(config, /sb_publishable_|eyJ/, 'Supabase client key must be configured');
+const clientConfig = config.replace(/^\s*\/\/.*$/gm, '');
+assert.doesNotMatch(clientConfig, /service_role|SUPABASE_SERVICE_ROLE_KEY/i, 'service role key must never be shipped in client config');
+for (const table of ['transactions', 'budgets', 'goals']) {
+  assert.match(schema, new RegExp('alter table public\\.' + table + ' enable row level security', 'i'), table + ' must enable RLS');
+}
+assert.match(schema, /auth\.uid\(\) = user_id/, 'RLS policies must constrain rows to the authenticated user');
+assert.match(deletion, /body\.confirm !== true/, 'account deletion must require explicit confirmation');
+assert.match(deletion, /supabase-js@2\.119\.2/, 'Edge Function Supabase SDK must be pinned to the same tested release');
+assert.match(deletion, /userClient\.auth\.getUser\(\)/, 'account deletion must validate the JWT user with Auth');
+assert.match(deletion, /auth\.admin\.deleteUser\(user\.id\)/, 'account deletion must delete only the authenticated user');
+assert.match(deletion, /SUPABASE_SERVICE_ROLE_KEY/, 'admin key must be read only in server-side function');
+
+console.log('FineMese static security checks passed.');
