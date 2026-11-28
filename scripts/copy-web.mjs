@@ -1,4 +1,5 @@
 import { mkdir, copyFile } from 'node:fs/promises';
+import { build } from 'esbuild';
 
 const files = [
   'index.html',
@@ -18,4 +19,13 @@ await copyFile(
   'www/vendor/supabase.js'
 );
 
-console.log('FineMese web files and pinned Supabase SDK copied to www/.');
+await build({
+  entryPoints: ['src/admob.js'],
+  bundle: true,
+  format: 'iife',
+  target: ['es2020'],
+  outfile: 'www/vendor/finemese-admob.js',
+  logLevel: 'info'
+});
+
+console.log('FineMese web files, pinned Supabase SDK and bundled AdMob module copied to www/.');
