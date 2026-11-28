@@ -11,7 +11,8 @@
     "cap:add:android": "npx cap add android",
     "cap:add:ios": "npx cap add ios",
     "cap:open:android": "npm run cap:sync && npx cap open android",
-    "cap:open:ios": "npm run cap:sync && npx cap open ios"
+    "cap:open:ios": "npm run cap:sync && npx cap open ios",
+    "test:static": "node scripts/static-check.mjs"
   },
   "dependencies": {
     "@capacitor/core": "8.6.2",
