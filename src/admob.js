@@ -122,5 +122,6 @@ window.FineMeseAds = {
   hideBanner,
   removeBanner,
   showPrivacyOptions,
+  isPrivacyOptionsRequired: () => privacyOptionsRequired,
   isNative: () => Capacitor.isNativePlatform()
 };
