@@ -2,19 +2,21 @@ import { readFile } from 'node:fs/promises';
 import assert from 'node:assert/strict';
 
 const read = (path) => readFile(new URL('../' + path, import.meta.url), 'utf8');
-const [pkg, html, config, schema, deletion, copyScript] = await Promise.all([
+const [pkg, html, config, schema, deletion, copyScript, sdkBundle] = await Promise.all([
   read('package.json'),
   read('index.html'),
   read('config.js'),
   read('supabase/schema.sql'),
   read('supabase/functions/delete-account/index.ts'),
-  read('scripts/copy-web.mjs')
+  read('scripts/copy-web.mjs'),
+  read('www/vendor/supabase.js')
 ]);
 
 assert.match(pkg.dependencies?.['@supabase/supabase-js'] ?? '', /^\d+\.\d+\.\d+$/, 'Supabase SDK must be pinned to an exact version');
 assert.match(copyScript, /node_modules\/@supabase\/supabase-js\/dist\/umd\/supabase\.js/, 'web copy step must include the installed Supabase UMD bundle');
 assert.match(copyScript, /www\/vendor\/supabase\.js/, 'web copy step must place the SDK in local app assets');
 assert.match(html, /<script src="\.\/vendor\/supabase\.js"><\/script>/, 'app must load the local Supabase SDK');
+assert.ok(sdkBundle.length > 10000 && sdkBundle.includes('createClient'), 'copied local Supabase SDK bundle must exist and contain createClient');
 assert.doesNotMatch(html, /cdn\.jsdelivr\.net\/npm\/@supabase\/supabase-js|unpkg\.com\/@supabase\/supabase-js/, 'app must not load Supabase SDK from a floating CDN version');
 assert.match(config, /https:\/\/[a-z0-9-]+\.supabase\.co/, 'Supabase project URL must use HTTPS');
 assert.match(config, /sb_publishable_|eyJ/, 'Supabase client key must be configured');
