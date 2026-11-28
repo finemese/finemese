@@ -26,6 +26,7 @@ for (const table of ['transactions', 'budgets', 'goals']) {
 }
 assert.match(schema, /auth\.uid\(\) = user_id/, 'RLS policies must constrain rows to the authenticated user');
 assert.match(deletion, /body\.confirm !== true/, 'account deletion must require explicit confirmation');
+assert.match(deletion, /supabase-js@2\.119\.2/, 'Edge Function Supabase SDK must be pinned to the same tested release');
 assert.match(deletion, /userClient\.auth\.getUser\(\)/, 'account deletion must validate the JWT user with Auth');
 assert.match(deletion, /auth\.admin\.deleteUser\(user\.id\)/, 'account deletion must delete only the authenticated user');
 assert.match(deletion, /SUPABASE_SERVICE_ROLE_KEY/, 'admin key must be read only in server-side function');
