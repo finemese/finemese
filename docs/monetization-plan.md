@@ -73,3 +73,15 @@ Gli ID pubblici dell'app/annuncio non sono password, ma non inserire credenziali
 - [ ] Funzione di acquisto una tantum Pro implementata e testata.
 - [ ] Informativa privacy e Data safety aggiornate sulla base degli SDK e dei flussi reali.
 - [ ] Annunci di produzione attivati solo dopo il completamento di tutti i controlli.
+
+
+## Avanzamento integrazione tecnica (28 novembre 2026)
+
+- [x] SDK AdMob/UMP collegato nel ramo di lavoro con soli App ID e banner unit Google ufficiali di test; gli annunci reali non sono attivi.
+- [x] Richiesta consenso UMP prima di richiedere annunci, con blocco richieste se il consenso non consente gli annunci e accesso alle opzioni privacy quando richiesto.
+- [x] Banner limitato all'area autenticata e nascosto durante l'inserimento nei campi.
+- [x] Workflow Android release APK/AAB completato con successo sul commit `6cb56072cd9c354bbac4afa33d9ea18934f98161`; artefatto `finemese-android-release` disponibile, ma non firmato.
+- [x] Workflow iOS Simulator completato con successo sullo stesso commit.
+- [ ] Workflow Android debug da ripetere: il run ha fallito per HTTP 429 da Maven Central durante il download di dipendenze, non per un errore di compilazione del codice.
+- [ ] Configurare il messaggio UMP nell'account AdMob reale e completare verifica privacy/Data safety prima di sostituire gli ID di test.
+- [ ] Specifica del flusso sicuro Google Play Billing Pro: [google-play-billing-pro-design.md](google-play-billing-pro-design.md). Non è ancora stato installato il plugin né attivato alcun prodotto o pagamento.
