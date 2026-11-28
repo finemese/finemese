@@ -11,7 +11,7 @@ const ANDROID_BANNER_TEST_ID = 'ca-app-pub-3940256099942544/9214589741';
 const IOS_BANNER_TEST_ID = 'ca-app-pub-3940256099942544/2435281174';
 
 let initialized = false;
-let bannerVisible = false;
+let bannerVisible = false;\nlet bannerHidden = false;
 let privacyOptionsRequired = false;
 let startupPromise = null;
 
@@ -62,7 +62,7 @@ async function showBanner() {
       margin: 0,
       isTesting: true
     });
-    bannerVisible = true;
+    bannerVisible = true;\n    bannerHidden = false;
   } catch (error) {
     console.warn('FineMese test banner unavailable:', error);
   }
@@ -84,7 +84,7 @@ async function removeBanner() {
   } catch (error) {
     console.warn('FineMese banner removal failed:', error);
   } finally {
-    bannerVisible = false;
+    bannerVisible = false;\n    bannerHidden = false;
   }
 }
 
