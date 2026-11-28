@@ -33,9 +33,9 @@ Questa checklist distingue il lavoro preparato nel repository dai passaggi che r
 - [ ] Completare Data safety, classificazione contenuti, target audience e dichiarazioni Play Console.
 - [ ] Preparare icona 512 × 512, feature graphic 1024 × 500 e screenshot reali.
 - [ ] Creare account AdMob, registrare l'app e generare App ID e Ad Unit ID banner.
-- [ ] Integrare CMP/Google UMP e flusso di consenso per utenti SEE prima delle richieste pubblicitarie.
-- [ ] Integrare AdMob con un solo banner nelle schermate principali autenticate; usare solo unità di test fino al via libera privacy/policy.
-- [ ] Implementare Google Play Billing per l'acquisto una tantum Pro e la rimozione degli annunci; prezzo indicativo €7,99 da confermare.
+- [x] Integrare nel client UMP e blocco delle richieste pubblicitarie finché il consenso non consente gli annunci (solo integrazione tecnica con ID di test). [ ] Configurare il messaggio di consenso nell'account AdMob reale e verificarlo per i paesi di distribuzione.
+- [x] Integrare AdMob con un solo banner limitato all'area autenticata e unità ufficiali di test; [ ] sostituire con ID reali solo dopo configurazione UMP, privacy e policy.
+- [x] Specifica tecnica del flusso sicuro Google Play Billing Pro documentata in docs/google-play-billing-pro-design.md; [ ] implementare plugin, verifica server, entitlement e ripristino acquisti; prezzo indicativo €7,99 da confermare.
 - [ ] Aggiornare privacy policy e Data safety in base agli SDK e ai dati effettivamente trattati.
 
 ## Interventi richiesti al titolare
@@ -48,3 +48,14 @@ Questa checklist distingue il lavoro preparato nel repository dai passaggi che r
 
 ## Regola di rilascio
 Non caricare un AAB non firmato e non dichiarare l'app pronta per la produzione finché i blocchi sopra non sono stati verificati. La PR di preparazione resta in bozza e non viene unita automaticamente.
+
+
+## Ultima verifica CI — 28 novembre 2026
+
+Commit verificato: `6cb56072cd9c354bbac4afa33d9ea18934f98161`.
+
+- [x] Android release: workflow completato con successo; artefatto `finemese-android-release` (APK/AAB non firmati) — https://github.com/finemese/finemese/actions/runs/46148339704
+- [x] iOS Simulator: workflow completato con successo — https://github.com/finemese/finemese/actions/runs/46148339671
+- [ ] Android debug: run fallito durante il download da Maven Central per risposte HTTP 429; ripetere il workflow quando il limite si sarà riassorbito — https://github.com/finemese/finemese/actions/runs/46148339697
+- [ ] Test su dispositivo Android reale: non eseguito.
+- [ ] Firma release: non configurata; gli artefatti non sono caricabili come release firmata.
